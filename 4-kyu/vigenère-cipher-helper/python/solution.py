@@ -1,27 +1,33 @@
-class VigenereCipher(object):
+import pytest
+from itertools import cycle
+
+class VigenereCipher (object):
     def __init__(self, key, alphabet):
         self.key = key
         self.alphabet = alphabet
     
-    def encode(self, text):
-        ch = ""
-        if len(text) > len(self.key):self.key = self.key * len(text)
-        for i in range(len(text)):
-            if text[i] not in self.alphabet:ch = ch + text[i]
+    def cipher(self, mode,str):
+        word = ""
+        for m,k in zip(str,cycle(self.key)):
+            if m in self.alphabet:
+               word = word + self.alphabet[(self.alphabet.index(m) +mode * self.alphabet.index(k)) % len(self.alphabet)]
             else:
-                index_txt = self.alphabet.index(self.key[i])
-                index_key = self.alphabet.index(text[i])
-                next_letter = self.alphabet[(index_txt+index_key)%len(self.alphabet)]
-                ch = ch + next_letter
-        return ch    
-    def decode(self, text):
-        ch = ""
-        if len(text) > len(self.key):self.key = self.key * len(text)
-        for i in range(len(text)):
-            if text[i] not in self.alphabet:ch = ch + text[i]
-            else:
-                index_txt = self.alphabet.index(self.key[i])
-                index_key = self.alphabet.index(text[i])
-                next_letter = self.alphabet[(index_key-index_txt)%len(self.alphabet)]
-                ch = ch + next_letter
-        return ch
+               word = word + m   
+        return word            
+    def encode(self, str): return self.cipher(1, str)
+    def decode(self, str): return self.cipher(-1, str)
+
+# testing 
+
+alphabet = 'abcdefghijklmnopqrstuvwxyz'
+key = 'password'
+c = VigenereCipher(key,alphabet)
+
+def test_cipher():
+    assert c.encode('codewars') == 'rovwsoiv'
+    assert c.decode('rovwsoiv') == 'codewars'
+    assert c.encode('waffles') == 'laxxhsj'
+    assert c.decode('laxxhsj') == 'waffles'
+    assert c.encode('CODEWARS') == 'CODEWARS'
+    assert c.decode('CODEWARS') == 'CODEWARS'
+    assert c.encode("it's a shift cipher!") == "xt'k o vwixl qzswej!"
