@@ -23,13 +23,6 @@ def mix(s1, s2):
     ch = sort(ch) # sort string by length
     return "\\".join(ch)      
     
-#s1 = "my&friend&Paul has heavy hats! &"
-#s2 = "my friend John has many many friends &"
-#s = mix(s1,s2)
-#print("s =",s)
-s1="Sadus:cpms>orqn3zecwGvnznSgacs"
-s2="MynwdKizfd$lvse+gnbaGydxyXzayp"
-s = mix(s1,s2)
-print("s =",s)
+
 
 
